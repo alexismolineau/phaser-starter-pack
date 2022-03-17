@@ -1,0 +1,102 @@
+import 'phaser';
+import Graphics = Phaser.GameObjects.Graphics;
+import Text = Phaser.GameObjects.Text;
+import TimerEvent = Phaser.Time.TimerEvent;
+
+export default class PreloaderScene extends Phaser.Scene {
+
+    // variables pour délayer le chargements de la scène de titre
+    readyCount: number;
+    timedEvent: TimerEvent;
+
+    constructor () {
+        super('Preloader');
+    }
+
+    init(): void {
+        this.readyCount = 0;
+    }
+
+    preload(): void {
+        this.add.image(400, 200, 'logo');
+
+        // barre de progression
+        const progressBar: Graphics = this.add.graphics();
+        const progressBox: Graphics = this.add.graphics();
+        progressBox.fillStyle(0x222222, 0.8);
+        progressBox.fillRect(240, 270, 320, 50);
+
+        // texte de chargement
+        const width: number = this.cameras.main.width;
+        const height: number = this.cameras.main.height;
+
+        const loadingText: Text = this.make.text({
+            x: width / 2,
+            y: height / 2 - 50,
+            text: 'Loading...',
+            style: {
+                font: '20px monospace',
+                color: '#ffffff'
+            }
+        });
+        loadingText.setOrigin(0.5, 0.5);
+
+        // texte %
+        const percentText: Text = this.make.text({
+            x: width / 2,
+            y: height / 2 - 5,
+            text: '0%',
+            style: {
+                font: '18px monospace',
+                color: '#ffffff'
+            }
+        });
+        percentText.setOrigin(0.5, 0.5);
+
+        // texte des ressources chargées
+        const assetText: Text = this.make.text({
+            x: width / 2,
+            y: height / 2 + 50,
+            text: '',
+            style: {
+                font: '18px monospace',
+                color: '#ffffff'
+            }
+        });
+
+        assetText.setOrigin(0.5, 0.5);
+
+        this.load.on('progress',  (value: number) => {
+            percentText.setText(value * 100 + '%');
+            progressBar.clear();
+            progressBar.fillStyle(0xffffff, 1);
+            progressBar.fillRect(250, 280, 300 * value, 30);
+        });
+
+        // update file progress text
+        this.load.on('fileprogress',  (file) => {
+            assetText.setText('Loading asset: ' + file.key);
+        });
+
+        this.load.on('complete',  () => {
+            this.scene.start('Title');
+        });
+
+        this.timedEvent = this.time.delayedCall(3000, this.ready, [], this);
+
+
+        this.load.image('blueButton1', 'assets/ui/blue_button02.png');
+        this.load.image('blueButton2', 'assets/ui/blue_button03.png');
+        this.load.image('phaserLogo', 'assets/logo.png');
+        this.load.image('box', 'assets/ui/grey_box.png');
+        this.load.image('checkedBox', 'assets/ui/blue_boxCheckmark.png');
+        this.load.audio('bgMusic', ['assets/TownTheme.mp3']);
+    }
+
+    ready(): void {
+        this.readyCount++;
+        if (this.readyCount === 2) {
+            this.scene.start('Title');
+        }
+    }
+};
