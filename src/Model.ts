@@ -1,4 +1,3 @@
-import DataManager = Phaser.Data.DataManager;
 import BaseSound = Phaser.Sound.BaseSound;
 
 export default class Model {

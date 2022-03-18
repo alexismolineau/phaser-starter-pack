@@ -1,16 +1,18 @@
 import 'phaser';
-import GameObject = Phaser.GameObjects.GameObject;
 import Zone = Phaser.GameObjects.Zone;
 import config from '../config';
 import Tween = Phaser.Tweens.Tween;
 import Text = Phaser.GameObjects.Text;
 
+/**
+ * Scène des crédits
+ */
 export default class CreditsScene extends Phaser.Scene {
 
     // texte crédit
     creditsText: Text;
     madeByText: Text;
-    // zone d'ancre pour les texte
+    // zone d'ancre pour les texte / tween
     zone: Zone;
     // Tween (défilement)
     creditsTween: Tween;
@@ -34,7 +36,6 @@ export default class CreditsScene extends Phaser.Scene {
             this.creditsText,
             this.zone
         );
-
         Phaser.Display.Align.In.Center(
             this.madeByText,
             this.zone

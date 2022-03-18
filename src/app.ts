@@ -17,7 +17,7 @@ class Jeu extends Phaser.Game {
         // instanciation modele global
         const model = new Model();
         this.registry.set('model', model);
-
+        // ajout des scenes au jeu
         this.scene.add('Game', GameScene);
         this.scene.add('Boot', BootScene);
         this.scene.add('Preloader', PreloaderScene);
@@ -29,4 +29,4 @@ class Jeu extends Phaser.Game {
     }
 }
 
-const game = new Jeu();
+new Jeu();

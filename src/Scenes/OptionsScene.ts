@@ -1,11 +1,12 @@
 import 'phaser';
 import Text = Phaser.GameObjects.Text;
 import Image = Phaser.GameObjects.Image;
-import Sprite = Phaser.GameObjects.Sprite;
 import Model from "../Model";
-import DataManager = Phaser.Data.DataManager;
 import Button from "../Objects/Button";
 
+/**
+ * Scène des options
+ */
 export default class OptionsScene extends Phaser.Scene {
 
     text: Text;
@@ -14,15 +15,14 @@ export default class OptionsScene extends Phaser.Scene {
     soundButton: Image;
     soundText: Text;
     menuButton: Button;
-    menuText: Text;
     model: Model;
 
-    constructor (config) {
+    constructor () {
         super('Options');
     }
 
     init(): void {
-        // initialisation du modele de config
+        // récupération du modele de config
         this.model = this.registry.get('model');
 
         // initialisation des objets

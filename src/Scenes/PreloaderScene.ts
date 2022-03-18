@@ -1,20 +1,15 @@
 import 'phaser';
 import Graphics = Phaser.GameObjects.Graphics;
 import Text = Phaser.GameObjects.Text;
-import TimerEvent = Phaser.Time.TimerEvent;
 
+/**
+ * Scène de chargement des ressources
+ */
 export default class PreloaderScene extends Phaser.Scene {
 
-    // variables pour délayer le chargements de la scène de titre
-    readyCount: number;
-    timedEvent: TimerEvent;
 
     constructor () {
         super('Preloader');
-    }
-
-    init(): void {
-        this.readyCount = 0;
     }
 
     preload(): void {
@@ -73,30 +68,24 @@ export default class PreloaderScene extends Phaser.Scene {
             progressBar.fillRect(250, 280, 300 * value, 30);
         });
 
-        // update file progress text
+        // affichage de la maj du chargement des ressources
         this.load.on('fileprogress',  (file) => {
             assetText.setText('Loading asset: ' + file.key);
         });
 
-        this.load.on('complete',  () => {
-            this.scene.start('Title');
-        });
-
-        this.timedEvent = this.time.delayedCall(3000, this.ready, [], this);
-
-
+        // chargement des ressources
         this.load.image('blueButton1', 'assets/ui/blue_button02.png');
         this.load.image('blueButton2', 'assets/ui/blue_button03.png');
         this.load.image('phaserLogo', 'assets/logo.png');
         this.load.image('box', 'assets/ui/grey_box.png');
         this.load.image('checkedBox', 'assets/ui/blue_boxCheckmark.png');
         this.load.audio('bgMusic', ['assets/TownTheme.mp3']);
+
+        // une fois le chargement terminé on passe à l'écran titre
+        this.load.on('complete',  () => {
+            this.scene.start('Title');
+        });
+
     }
 
-    ready(): void {
-        this.readyCount++;
-        if (this.readyCount === 2) {
-            this.scene.start('Title');
-        }
-    }
 };
